@@ -14,24 +14,6 @@ app.use(
   })
 );
 
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, DELETE"
-  );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://image-fetcher-express-2jhi.vercel.app"
-  );
-  next();
-});
-
-app.options("*", (req, res) => {
-  res.sendStatus(200);
-});
-
 const getUrlArray = (brand, productCode, colorCode) => {
   if (brand == "asics") {
     const urlArray = [
@@ -60,36 +42,13 @@ app.post("/images", (req, res) => {
   try {
     const { brand, productCode, colorCode } = req.body;
     const urlArray = getUrlArray(brand, productCode, colorCode);
-    res.header("Access-Control-Allow-Origin", "*");
+
     res.status(200).json(urlArray);
   } catch (error) {
     console.log("Error downloading image: ", error.message);
     res.status(500).json({ error: "Error downloading image" });
   }
 });
-
-//This was a learning exercise to deal with arraybuffer and blob
-// app.post("/api", async (req, res) => {
-//   try {
-//     const { brand, productCode, colorCode } = req.body;
-//     const urlArray = getUrlArray(brand, productCode, colorCode);
-//     const imageArray = await Promise.all(
-//       urlArray.map(async (url, index) => {
-//         const response = await axios.get(url);
-//         const blob = new Blob([response.data], { type: "image/jpeg" });
-//         const imageUrl = URL.createObjectURL(blob);
-//         return {
-//           index,
-//           imageUrl,
-//         };
-//       })
-//     );
-//     res.json(imageArray);
-//   } catch (error) {
-//     console.log("Error downloading image: ", error.message);
-//     res.status(500).json({ error: "Error downloading image" });
-//   }
-// });
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
