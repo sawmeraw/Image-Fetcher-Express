@@ -7,9 +7,7 @@ const https = require("https");
 const app = express();
 
 const corsOptions = {
-  origin: "https://image-fetcher-express-2jhi.vercel.app/",
-  methods: "POST",
-  optionsSuccessStatus: 200,
+  origin: "https://image-fetcher-express-2jhi.vercel.app",
 };
 
 app.use(cors(corsOptions));
