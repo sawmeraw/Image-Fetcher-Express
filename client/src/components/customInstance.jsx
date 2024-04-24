@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const fetchData = axios.create({
-  baseURL: "http://localhost:5000/",
+  baseURL: "https://image-fetcher-express.vercel.app/",
 });
 
 export default fetchData;
