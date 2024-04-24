@@ -8,6 +8,7 @@ const app = express();
 
 const corsOptions = {
   origin: "https://image-fetcher-express-2jhi.vercel.app",
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
