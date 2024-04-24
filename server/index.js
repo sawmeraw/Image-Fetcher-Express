@@ -14,6 +14,20 @@ app.use(
   })
 );
 
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, DELETE"
+  );
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
+
+app.options("*", (req, res) => {
+  res.sendStatus(200);
+});
+
 const getUrlArray = (brand, productCode, colorCode) => {
   if (brand == "asics") {
     const urlArray = [
@@ -37,16 +51,6 @@ const getUrlArray = (brand, productCode, colorCode) => {
     return urlArray;
   }
 };
-
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, DELETE"
-  );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  next();
-});
 
 app.post("/api", async (req, res) => {
   try {
