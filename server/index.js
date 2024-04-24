@@ -12,6 +12,8 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 
+app.use(cors({ origin: true, credentials: true }));
+
 const getUrlArray = (brand, productCode, colorCode) => {
   if (brand == "asics") {
     const urlArray = [
