@@ -7,7 +7,12 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 
-app.use(cors({ origin: true, credentials: true }));
+app.use(
+  cors({
+    origin: "https://image-fetcher-express-2jhi.vercel.app",
+    credentials: true,
+  })
+);
 
 const getUrlArray = (brand, productCode, colorCode) => {
   if (brand == "asics") {
