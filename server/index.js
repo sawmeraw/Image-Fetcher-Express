@@ -33,10 +33,6 @@ const getUrlArray = (brand, productCode, colorCode) => {
   }
 };
 
-app.get("/", (req, res) => {
-  res.status(200).send("Hello World");
-});
-
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
