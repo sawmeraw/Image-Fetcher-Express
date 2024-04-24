@@ -36,6 +36,10 @@ const getUrlArray = (brand, productCode, colorCode) => {
   }
 };
 
+app.get("/", (req, res) => {
+  res.status(200).send("Hello World");
+});
+
 app.post("/api", async (req, res) => {
   try {
     const { brand, productCode, colorCode } = req.body;
