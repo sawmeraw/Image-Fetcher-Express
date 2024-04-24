@@ -1,8 +1,5 @@
 const express = require("express");
-const axios = require("axios");
 const cors = require("cors");
-const http = require("http");
-const https = require("https");
 
 const app = express();
 
@@ -38,6 +35,16 @@ const getUrlArray = (brand, productCode, colorCode) => {
 
 app.get("/", (req, res) => {
   res.status(200).send("Hello World");
+});
+
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, DELETE"
+  );
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
 });
 
 app.post("/api", async (req, res) => {
