@@ -22,7 +22,7 @@ const Search = () => {
     };
     const fetchImages = async () => {
       try {
-        const response = await fetchData.post("/api", data);
+        const response = await fetchData.post("/images", data);
         if (!response.ok) {
           toast.error("Error fetching image", { autoClose: 1500 });
           return;
