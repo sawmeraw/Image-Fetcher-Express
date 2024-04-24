@@ -21,6 +21,10 @@ app.use((req, res, next) => {
     "GET, POST, OPTIONS, PUT, DELETE"
   );
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://image-fetcher-express-2jhi.vercel.app"
+  );
   next();
 });
 
