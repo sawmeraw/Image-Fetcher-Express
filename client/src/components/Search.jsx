@@ -25,6 +25,7 @@ const Search = () => {
         const response = await fetchData.post("/api", data);
         if (!response.ok) {
           toast.error("Error fetching image", { autoClose: 1500 });
+          return;
         }
 
         toast.success("Images fetched successfully", { autoClose: 1500 });
