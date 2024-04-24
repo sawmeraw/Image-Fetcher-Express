@@ -42,7 +42,7 @@ app.post("/api", async (req, res) => {
   try {
     const { brand, productCode, colorCode } = req.body;
     const urlArray = getUrlArray(brand, productCode, colorCode);
-    res.json(urlArray);
+    res.status(200).json(urlArray);
   } catch (error) {
     console.log("Error downloading image: ", error.message);
     res.status(500).json({ error: "Error downloading image" });
