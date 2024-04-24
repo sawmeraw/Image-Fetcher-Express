@@ -56,7 +56,7 @@ const getUrlArray = (brand, productCode, colorCode) => {
   }
 };
 
-app.post("/images", async (req, res) => {
+app.post("/images", (req, res) => {
   try {
     const { brand, productCode, colorCode } = req.body;
     const urlArray = getUrlArray(brand, productCode, colorCode);
