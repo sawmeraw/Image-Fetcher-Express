@@ -13,7 +13,6 @@ app.use(express.json());
 app.use(
   cors({
     origin: "https://image-fetcher-express-2jhi.vercel.app",
-    optionsSuccessStatus: 200,
   })
 );
 
