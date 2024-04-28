@@ -54,7 +54,7 @@ const History = () => {
     return (
       <>
         <div className="max-w-5xl mx-auto mt-4">
-          <p className="text-5xl font-bold mt-8">Error fetching data!</p>
+          <p className="text-5xl font-bold mt-8">Error fetching data!😶</p>
         </div>
       </>
     );
