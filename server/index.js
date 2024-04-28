@@ -16,7 +16,14 @@ app.use(
   })
 );
 
-mongoose.connect(process.env.ATLAS_URI);
+mongoose
+  .connect(process.env.ATLAS_URI)
+  .then(() => {
+    console.log("Connected to MongoDB");
+  })
+  .catch((err) => {
+    console.log("Error connecting to MongoDB: ", err.message);
+  });
 
 const getUrlArray = (brand, productCode, colorCode) => {
   if (brand == "asics") {
