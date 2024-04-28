@@ -1,5 +1,8 @@
+const Product = require("./models/Product.js");
 const express = require("express");
 const cors = require("cors");
+const mongoose = require("mongoose");
+require("dotenv").config();
 
 const app = express();
 
@@ -13,6 +16,8 @@ app.use(
     optionsSuccessStatus: 200,
   })
 );
+
+mongoose.connect(process.env.ATLAS_URI);
 
 const getUrlArray = (brand, productCode, colorCode) => {
   if (brand == "asics") {
@@ -38,15 +43,51 @@ const getUrlArray = (brand, productCode, colorCode) => {
   }
 };
 
-app.post("/images", (req, res) => {
+app.post("/history", async (req, res) => {
+  try {
+    const { productCode, colorCode } = req.body;
+    await Product.deleteOne({
+      productCode: productCode,
+      colorCode: colorCode,
+    });
+    res.status(200).json({ message: "Product deleted successfully" });
+  } catch (error) {
+    console.log("Error deleting product: ", error.message);
+    res.status(500).json({ error: "Error deleting product" });
+  }
+});
+
+app.post("/images", async (req, res) => {
   try {
     const { brand, productCode, colorCode } = req.body;
     const urlArray = getUrlArray(brand, productCode, colorCode);
+    const exists = await Product.findOne({ productCode, colorCode });
+    if (exists) {
+      res.status(200).json(exists.urlArray);
+    } else {
+      const newProduct = new Product({
+        brand,
+        productCode,
+        colorCode,
+        urlArray,
+      });
+      await newProduct.save();
 
-    res.status(200).json(urlArray);
+      res.status(200).json(urlArray);
+    }
   } catch (error) {
     console.log("Error downloading image: ", error.message);
     res.status(500).json({ error: "Error downloading image" });
+  }
+});
+
+app.get("/history", async (req, res) => {
+  try {
+    const products = await Product.find({});
+    res.status(200).json(products);
+  } catch (error) {
+    console.log("Error fetching history: ", error.message);
+    res.status(500).json({ error: "Error fetching history" });
   }
 });
 
