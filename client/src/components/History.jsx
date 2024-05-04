@@ -15,11 +15,11 @@ const History = () => {
   const { mutate: deleteProduct, isLoading } = useMutation({
     mutationFn: (data) => fetchData.post(`/history/`, data),
     onSuccess: () => {
-      toast.success("Product deleted successfully!");
+      toast.success("Product deleted successfully!", { autoClose: 1000 });
       queryClient.invalidateQueries(["history"]);
     },
     onError: () => {
-      toast.error("Error deleting product!");
+      toast.error("Error deleting product!", { autoClose: 1000 });
     },
   });
 
@@ -30,7 +30,7 @@ const History = () => {
 
   if (isPending) {
     return (
-      <div className="max-w-5xl mx-auto mt-4">
+      <div className="max-w-5xl mx-auto mt-4 main-page">
         <p className="text-2xl font-semibold">Fetching History...</p>
         <div className="animate-pulse mt-8">
           <table className="w-full table-auto">
@@ -93,7 +93,7 @@ const History = () => {
 
   return (
     <>
-      <div className="max-w-5xl mx-auto mt-4 ">
+      <div className="max-w-5xl mx-auto mt-4 main-page">
         <p className="text-2xl font-semibold">Fetch History</p>
         <div className="mt-8">
           <table className="w-full table-auto">
@@ -118,7 +118,9 @@ const History = () => {
                     <td className="border px-4 py-2">{product.brand}</td>
                     <td className="border px-4 py-2">{product.productCode}</td>
                     <td className="border px-4 py-2">{product.colorCode}</td>
-                    <td className="border px-4 py-2">{product.createdAt}</td>
+                    <td className="border px-4 py-2">
+                      {product.createdAt.substring(0, 10)}
+                    </td>
                     <td className="border px-4 py-2">
                       <button
                         onClick={() =>

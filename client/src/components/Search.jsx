@@ -24,7 +24,7 @@ const Search = () => {
       try {
         const response = await fetchData.post("/images", data);
 
-        toast.success("Images fetched successfully", { autoClose: 1500 });
+        // toast.success("Images fetched successfully", { autoClose: 1500 });
         setImages(response.data);
       } catch (error) {
         console.log(error.message);
@@ -36,6 +36,7 @@ const Search = () => {
   const handleError = () => {
     setImages([]);
     setError(true);
+    toast.error("Image not found", { autoClose: 1500 });
   };
 
   const handleDownloadAllClick = async () => {
@@ -65,15 +66,19 @@ const Search = () => {
 
   return (
     <>
-      <div className="px-16 py-14">
-        <p className="text-center font-semibold text-2xl mb-8">
-          Brands Supported: Asics, Saucony
-        </p>
+      <div
+        className={`px-16 py-14 main-page ${
+          images.length > 0 && "grid grid-cols-2"
+        }`}
+      >
         <form
           action=""
           onSubmit={handleFormSubmit}
           className="w-[700px] h-auto px-4 py-4 mx-auto"
         >
+          <p className="text-center font-semibold text-2xl mb-8">
+            Brands Supported: Asics, Saucony, New Balance
+          </p>
           <div className="flex flex-col gap-4 items-center py-4 justify-center">
             <select
               name="brand"
@@ -85,12 +90,15 @@ const Search = () => {
               <option value="">Select Brand</option>
               <option value="asics">Asics</option>
               <option value="saucony">Saucony</option>
+              <option value="newbalance">New Balance</option>
             </select>
             {selected && (
-              <p className="bg-yellow-300 border-yellow-700 border-2 px-2 py-2">
+              <p className="bg-yellow-100 rounded-md border-yellow-700 border-2 px-2 py-2">
                 {selected === "asics"
                   ? "Eg. For Asics, use product code: 1011B548 and color code: 001"
-                  : "Eg. For Saucony, use product code: S20939 and color code: 129"}
+                  : selected == "saucony"
+                  ? "Eg. For Saucony, use product code: S20939 and color code: 129"
+                  : "Try M1080P13, if it works, it works. If it doesn't, New Balance just sucks 😆."}
               </p>
             )}
           </div>
@@ -111,7 +119,7 @@ const Search = () => {
               name="color-code"
               id="color-code"
               required
-              className="rounded-md border-cyan-500 border-2 focus:outline-none px-2 w-1/4 font-sm"
+              className={`rounded-md border-cyan-500 border-2 focus:outline-none px-2 w-1/4 font-sm`}
             />
           </div>
           <div className="py-4 flex justify-center">
@@ -123,7 +131,17 @@ const Search = () => {
             </button>
           </div>
         </form>
-        <div className="mt-4 px-4 py-4 flex flex-row gap-4 items-center justify-center">
+        <div className="mt-4 px-4 py-4 flex flex-row flex-wrap gap-4 items-center justify-center">
+          <div className="flex w-full items-center justify-end mt-4">
+            {images.length > 0 && (
+              <button
+                onClick={handleDownloadAllClick}
+                className="px-4 py-2 bg-cyan-400 rounded-md hover:scale-110 duration-300 text-white font-semibold hover:text-black"
+              >
+                Download All
+              </button>
+            )}
+          </div>
           {images?.map((image, index) => {
             const id = index;
             return (
@@ -139,16 +157,7 @@ const Search = () => {
             );
           })}
         </div>
-        <div className="flex w-full items-center justify-center mt-4">
-          {images.length > 0 && (
-            <button
-              onClick={handleDownloadAllClick}
-              className="px-4 py-2 bg-cyan-400 rounded-md hover:scale-110 duration-300 text-white font-semibold hover:text-black"
-            >
-              Download All
-            </button>
-          )}
-        </div>
+
         <div className="flex w-full items-center justify-center mt-4">
           {error && <p>No images found. Check the URL.</p>}
         </div>

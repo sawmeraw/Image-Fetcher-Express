@@ -10,11 +10,13 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 
-app.use(
-  cors({
-    origin: "https://image-fetcher-express-2jhi.vercel.app",
-  })
-);
+// app.use(
+//   cors({
+//     origin: "https://image-fetcher-express-2jhi.vercel.app",
+//   })
+// );
+
+app.use(cors());
 
 mongoose
   .connect(process.env.ATLAS_URI)
@@ -46,6 +48,16 @@ const getUrlArray = (brand, productCode, colorCode) => {
       `https://s7d4.scene7.com/is/image/WolverineWorldWide/${productCode}-${colorCode}_6?$dw-hi-res$`,
     ];
     return urlArray;
+  } else if (brand == "newbalance") {
+    const urlArray = [
+      `https://nb.scene7.com/is/image/NB/${productCode}_nb_02_i?$dw_pdp_hero$`,
+      `https://nb.scene7.com/is/image/NB/${productCode}_nb_03_i?$dw_pdp_hero$`,
+      `https://nb.scene7.com/is/image/NB/${productCode}_nb_04_i?$dw_pdp_hero$`,
+      `https://nb.scene7.com/is/image/NB/${productCode}_nb_05_i?$dw_pdp_hero$`,
+      `https://nb.scene7.com/is/image/NB/${productCode}_nb_06_i?$dw_pdp_hero$`,
+      `https://nb.scene7.com/is/image/NB/${productCode}_nb_07_i?$dw_pdp_hero$`,
+    ];
+    return urlArray;
   }
 };
 
@@ -66,6 +78,7 @@ app.post("/history", async (req, res) => {
 app.post("/images", async (req, res) => {
   try {
     const { brand, productCode, colorCode } = req.body;
+
     const urlArray = getUrlArray(brand, productCode, colorCode);
     const exists = await Product.findOne({ productCode, colorCode });
     if (exists) {
