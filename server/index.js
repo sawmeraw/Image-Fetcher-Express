@@ -10,13 +10,13 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 
-// app.use(
-//   cors({
-//     origin: "https://image-fetcher-express-2jhi.vercel.app",
-//   })
-// );
+app.use(
+  cors({
+    origin: "https://image-fetcher-express-2jhi.vercel.app",
+  })
+);
 
-app.use(cors());
+// app.use(cors());
 
 mongoose
   .connect(process.env.ATLAS_URI)
