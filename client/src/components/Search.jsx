@@ -16,15 +16,13 @@ const Search = () => {
     const productCode = formData.get("product-code");
     const colorCode = formData.get("color-code");
     const data = {
-      brand: formData.get("brand"),
+      brand: selected,
       productCode: productCode.trim(),
       colorCode: colorCode.trim(),
     };
     const fetchImages = async () => {
       try {
         const response = await fetchData.post("/images", data);
-
-        // toast.success("Images fetched successfully", { autoClose: 1500 });
         setImages(response.data);
       } catch (error) {
         console.log(error.message);
