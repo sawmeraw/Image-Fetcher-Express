@@ -3,5 +3,6 @@
 @tailwind utilities;
 
 .main-page {
-  height: calc(100vh - 160px);
+  height: auto;
+  margin-bottom: 4rem;
 }

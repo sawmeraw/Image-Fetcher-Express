@@ -8,7 +8,7 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 
-app.use(express.json());
+// app.use(express.json());
 
 app.use(
   cors({
@@ -49,13 +49,14 @@ const getUrlArray = (brand, productCode, colorCode) => {
     ];
     return urlArray;
   } else if (brand == "newbalance") {
+    const code = productCode.toLowerCase();
     const urlArray = [
-      `https://nb.scene7.com/is/image/NB/${productCode}_nb_02_i?$dw_pdp_hero$`,
-      `https://nb.scene7.com/is/image/NB/${productCode}_nb_03_i?$dw_pdp_hero$`,
-      `https://nb.scene7.com/is/image/NB/${productCode}_nb_04_i?$dw_pdp_hero$`,
-      `https://nb.scene7.com/is/image/NB/${productCode}_nb_05_i?$dw_pdp_hero$`,
-      `https://nb.scene7.com/is/image/NB/${productCode}_nb_06_i?$dw_pdp_hero$`,
-      `https://nb.scene7.com/is/image/NB/${productCode}_nb_07_i?$dw_pdp_hero$`,
+      `https://nb.scene7.com/is/image/NB/${code}_nb_02_i?$dw_detail_main_lg$&bgc=ffffff&layer=1&bgcolor=ffffff&blendMode=mult&scale=10&wid=1600&hei=1600`,
+      `https://nb.scene7.com/is/image/NB/${code}_nb_03_i?$dw_detail_main_lg$&bgc=ffffff&layer=1&bgcolor=ffffff&blendMode=mult&scale=10&wid=1600&hei=1600`,
+      `https://nb.scene7.com/is/image/NB/${code}_nb_04_i?$dw_detail_main_lg$&bgc=ffffff&layer=1&bgcolor=ffffff&blendMode=mult&scale=10&wid=1600&hei=1600`,
+      `https://nb.scene7.com/is/image/NB/${code}_nb_05_i?$dw_detail_main_lg$&bgc=ffffff&layer=1&bgcolor=ffffff&blendMode=mult&scale=10&wid=1600&hei=1600`,
+      `https://nb.scene7.com/is/image/NB/${code}_nb_06_i?$dw_detail_main_lg$&bgc=ffffff&layer=1&bgcolor=ffffff&blendMode=mult&scale=10&wid=1600&hei=1600`,
+      `https://nb.scene7.com/is/image/NB/${code}_nb_07_i?$dw_detail_main_lg$&bgc=ffffff&layer=1&bgcolor=ffffff&blendMode=mult&scale=10&wid=1600&hei=1600`,
     ];
     return urlArray;
   }
@@ -112,4 +113,14 @@ app.get("/history", async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+});
+
+app.put("/deleteall", async (req, res) => {
+  try {
+    await Product.deleteMany({});
+    res.status(200).json({ message: "All products deleted successfully" });
+  } catch (error) {
+    console.log("Error deleting all products: ", error.message);
+    res.status(500).json({ error: "Error deleting all products" });
+  }
 });
