@@ -16,7 +16,7 @@ app.use(
   })
 );
 
-// app.use(cors());
+app.use(cors());
 
 mongoose
   .connect(process.env.ATLAS_URI)
