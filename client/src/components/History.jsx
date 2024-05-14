@@ -23,9 +23,24 @@ const History = () => {
     },
   });
 
+  const { mutate: deleteAllProducts, isLoading: isDeletingAll } = useMutation({
+    mutationFn: () => fetchData.put("/deleteall"),
+    onSuccess: () => {
+      toast.success("All products deleted successfully!", { autoClose: 1000 });
+      queryClient.invalidateQueries(["history"]);
+    },
+    onError: () => {
+      toast.error("Error deleting all products!", { autoClose: 1000 });
+    },
+  });
+
   const handleRowDelete = (productCode, colorCode) => {
     const data = { productCode, colorCode };
     deleteProduct(data);
+  };
+
+  const handleDeleteAll = () => {
+    deleteAllProducts();
   };
 
   if (isPending) {
@@ -94,7 +109,18 @@ const History = () => {
   return (
     <>
       <div className="max-w-5xl mx-auto mt-4 main-page">
-        <p className="text-2xl font-semibold">Fetch History</p>
+        <div className="flex justify-between">
+          <p className="text-2xl font-semibold">Fetch History</p>
+          <button
+            onClick={handleDeleteAll}
+            className={`px-2  py-1 bg-red-500 ${
+              products.length === 0 ? "hidden" : "block"
+            } rounded-md hover:bg-red-400 duration-200 text-white font-semibold`}
+            disabled={isDeletingAll || products.length === 0}
+          >
+            Delete All
+          </button>
+        </div>
         <div className="mt-8">
           <table className="w-full table-auto">
             <thead>
@@ -131,7 +157,7 @@ const History = () => {
                         }
                         type="button"
                         disabled={isLoading}
-                        className="mx-auto block hover:scale-110 duration-200 bg-red-500 text-white px-2 rounded-md border"
+                        className="mx-auto block hover:bg-red-400 duration-200 bg-red-500 text-white px-2 rounded-md border"
                       >
                         {isLoading ? "Deleting" : "Delete"}
                       </button>

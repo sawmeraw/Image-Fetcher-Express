@@ -1,25 +1,20 @@
 import React from "react";
-import { FaExternalLinkAlt } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa";
 
-const Footer = () => {
+const Repo = () => {
   return (
     <>
-      <footer className="bg-slate-700 h-16 flex flex-col items-center justify-center text-white">
-        <p className="text-sm">© 2024 img express</p>
-        <p className="text-sm flex hover:scale-110 duration-200">
-          Repo:{" "}
-          <a
-            href="https://github.com/sawmeraw/Image-Fetcher-Express/tree/main"
-            target="_blank"
-            className="flex items-center px-2 gap-2 hover:underline"
-          >
-            Github
-            <FaExternalLinkAlt />
-          </a>{" "}
-        </p>
-      </footer>
+      <div className="footer hover:scale-110">
+        <a
+          href="https://github.com/sawmeraw/Image-Fetcher-Express/tree/main"
+          target="_blank"
+          className="flex items-center px-2 gap-2 hover:underline"
+        >
+          <FaGithub />
+        </a>{" "}
+      </div>
     </>
   );
 };
 
-export default Footer;
+export default Repo;

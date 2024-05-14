@@ -7,11 +7,11 @@ import { toast } from "react-toastify";
 const Search = () => {
   const [images, setImages] = useState([]);
   const [selected, setSelected] = useState();
-  const [error, setError] = useState(false);
+  const [erroredImages, setErroredImages] = useState(new Set());
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    setError(false);
+    setErroredImages(new Set());
     const formData = new FormData(e.target);
     const productCode = formData.get("product-code");
     const colorCode = formData.get("color-code");
@@ -33,10 +33,9 @@ const Search = () => {
     fetchImages();
   };
 
-  const handleError = () => {
-    setImages([]);
-    setError(true);
-    toast.error("Image not found", { autoClose: 1500 });
+  const handleError = (index) => {
+    setErroredImages((prev) => new Set([...prev, index]));
+    toast.warn(`Some issue with image-${index + 1}`, { autoClose: 750 });
   };
 
   const handleDownloadAllClick = async () => {
@@ -55,12 +54,12 @@ const Search = () => {
         link.href = URL.createObjectURL(blob);
         link.download = `images-${nanoid()}.zip`;
         link.click();
-        toast.success("Images downloaded successfully", { autoClose: 1500 });
+        toast.success("Images downloaded successfully", { autoClose: 750 });
         URL.revokeObjectURL(link.href);
       })
       .catch((error) => {
         console.log(error.message);
-        toast.error("Error creating zip file", { autoClose: 1500 });
+        toast.error("Error creating zip file", { autoClose: 750 });
       });
   };
 
@@ -68,18 +67,18 @@ const Search = () => {
     <>
       <div
         className={`px-16 py-14 main-page ${
-          images.length > 0 && "grid grid-cols-2"
+          images.length > 0 && "flex flex-col"
         }`}
       >
         <form
           action=""
           onSubmit={handleFormSubmit}
-          className="w-[700px] h-auto px-4 py-4 mx-auto"
+          className="w-[700px] h-auto px-4 py-4 mx-auto shadow-lg rounded-md"
         >
-          <p className="text-center font-semibold text-2xl mb-8">
+          <p className="text-center font-semibold text-xl mb-8">
             Brands Supported: Asics, Saucony, New Balance
           </p>
-          <div className="flex flex-col gap-4 items-center py-4 justify-center">
+          <div className="flex flex-col gap-4 items-center py-4 justify-center ">
             <select
               name="brand"
               id="brand"
@@ -93,12 +92,12 @@ const Search = () => {
               <option value="newbalance">New Balance</option>
             </select>
             {selected && (
-              <p className="bg-yellow-100 rounded-md border-yellow-700 border-2 px-2 py-2">
+              <p className="bg-yellow-100 text-sm rounded-md border-yellow-700 border-2 px-2 py-2">
                 {selected === "asics"
-                  ? "Eg. For Asics, use product code: 1011B548 and color code: 001"
+                  ? "Example: product code: 1011B548 and color code: 001"
                   : selected == "saucony"
-                  ? "Eg. For Saucony, use product code: S20939 and color code: 129"
-                  : "Try M1080P13, if it works, it works. If it doesn't, New Balance just sucks 😆."}
+                  ? "Example: product code: S20939 and color code: 129"
+                  : "Example: product code: M1080P13 and color code doesnt matter"}
               </p>
             )}
           </div>
@@ -125,25 +124,18 @@ const Search = () => {
           <div className="py-4 flex justify-center">
             <button
               type="submit"
-              className="px-4 py-2 bg-cyan-400 rounded-md text-white font-semibold hover:scale-110 duration-300 hover:text-black "
+              className="px-4 py-2 bg-cyan-400 rounded-md text-white font-semibold duration-300 hover:bg-cyan-300 "
             >
               Fetch
             </button>
           </div>
         </form>
-        <div className="mt-4 px-4 py-4 flex flex-row flex-wrap gap-4 items-center justify-center">
-          <div className="flex w-full items-center justify-end mt-4">
-            {images.length > 0 && (
-              <button
-                onClick={handleDownloadAllClick}
-                className="px-4 py-2 bg-cyan-400 rounded-md hover:scale-110 duration-300 text-white font-semibold hover:text-black"
-              >
-                Download All
-              </button>
-            )}
-          </div>
+        <div className="mt-8 px-4 py-4 flex flex-row flex-wrap gap-4 items-center justify-center">
           {images?.map((image, index) => {
             const id = index;
+            if (erroredImages.has(index)) {
+              return null;
+            }
             return (
               <>
                 <img
@@ -151,15 +143,29 @@ const Search = () => {
                   src={image}
                   alt="product image"
                   className="w-[200px] h-auto mx-auto shadow-lg rounded-md"
-                  onError={handleError}
+                  onError={() => handleError(index)}
                 />
               </>
             );
           })}
         </div>
-
         <div className="flex w-full items-center justify-center mt-4">
-          {error && <p>No images found. Check the URL.</p>}
+          {images.length > 0 && (
+            <button
+              onClick={handleDownloadAllClick}
+              className={`px-4 py-2 bg-cyan-400 ${
+                erroredImages.size == images.length ? "hidden" : "block"
+              } rounded-md duration-300 text-white font-semibold hover:bg-cyan-300`}
+            >
+              Download All
+            </button>
+          )}
+        </div>
+
+        <div className="flex w-full items-center justify-center mt-4 mb-8">
+          {erroredImages.size == images.length && erroredImages.size != 0 && (
+            <p>No images found. Check the URL.</p>
+          )}
         </div>
       </div>
     </>
